@@ -22,8 +22,25 @@ void setup(){
     followPath(p);  
   }
   
+  // Remove repeated cycles
+  for(int i=0; i<cycles.size(); i++){
+    for(int j=i+1; j<cycles.size(); j++){
+      if(equals(cycles.get(i), cycles.get(j))){
+        cycles.remove(j);
+        if(j>i) j--;
+      }
+    }
+  }
+  
   println("-----------");
   for(ArrayList<Integer> cycle : cycles) logPath(cycle);
+}
+
+boolean equals(ArrayList<Integer> a, ArrayList<Integer> b){
+  for(Integer i : a){
+    if(!b.contains(i)) return false;  
+  }
+  return true;
 }
 
 void followPath(ArrayList<Integer> path){    
