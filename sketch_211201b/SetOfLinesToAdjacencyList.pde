@@ -1,9 +1,7 @@
 // This module receives a set of lines and returns an adjacency list.
 
-ArrayList<Integer>[] setOfLinesToAdjacencyList(PVector[][] _lines){
+ArrayList<Integer>[] setOfLinesToAdjacencyList(ArrayList<PVector[]> lines){
   
-  ArrayList<PVector[]> lines = new ArrayList<PVector[]>();
-  for(PVector[] l : _lines) lines.add(l);
   
   for(int i=0; i<lines.size(); i++){
       for(int j=i+1; j<lines.size(); j++){
