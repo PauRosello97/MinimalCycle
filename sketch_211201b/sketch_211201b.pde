@@ -1,17 +1,17 @@
 import java.util.*;
 ArrayList<PVector> intersections;
-ArrayList<PShape> polygons;
+ArrayList<Polygon> polygons;
 
 void setup(){
   size(600, 600);
   background(255);
   
   
-  PVector[] lA = {new PVector(0, 0), new PVector(100, 100)};
-  PVector[] lB = {new PVector(0, 0), new PVector(0, 100)};
-  PVector[] lC = {new PVector(0, 50), new PVector(100, 50)};
-  PVector[] lD = {new PVector(0, 100), new PVector(100, 100)};
-  PVector[] lE = {new PVector(25, 0), new PVector(25, 75)};
+  PVector[] lA = {new PVector(0, 0), new PVector(600, 600)};
+  PVector[] lB = {new PVector(0, 0), new PVector(0, 600)};
+  PVector[] lC = {new PVector(0, 300), new PVector(600, 300)};
+  PVector[] lD = {new PVector(0, 600), new PVector(600, 600)};
+  PVector[] lE = {new PVector(150, 0), new PVector(150, 450)};
   
   ArrayList<PVector[]> lines = new ArrayList<PVector[]>();
   
@@ -21,9 +21,9 @@ void setup(){
   lines.add(lD);
   lines.add(lE);
   
-  for(int i=0; i<10; i++){
+  for(int i=0; i<3; i++){
     PVector[] newLine = {new PVector(random(width), random(height)), new PVector(random(width), random(height))};
-    //lines.add(newLine);
+    lines.add(newLine);
   }
   
   intersections = new ArrayList<PVector>();
@@ -34,7 +34,7 @@ void setup(){
   for(ArrayList<Integer> cycle : cycles) logPath(cycle);
   polygons = cyclesToPolygons(cycles, intersections);
   
-  for(PShape polygon : polygons) shape(polygon);
+  for(Polygon polygon : polygons) polygon.draw();
     
 }
 
