@@ -1,8 +1,13 @@
+// This modules receives an adjacency list and returns a list of cycles.
+// Not only the minimal basis cycles are detected, so to hide the cycles
+// containing other cycles, the returned list is sorted by the size of
+// the cycles. This should be adressed in future versions.
+
 ArrayList<ArrayList<Integer>> adjacencyListToCycleList(ArrayList<Integer>[] adjacencyList){
   
   ArrayList<ArrayList<Integer>> cycles = new ArrayList<ArrayList<Integer>>();
   
-  for(int i=0; i<N_NODES; i++){
+  for(int i=0; i<adjacencyList.length; i++){
     ArrayList<Integer> p = new ArrayList<Integer>();
     p.add(i);
     followPath(p, cycles, adjacencyList);  
@@ -13,7 +18,7 @@ ArrayList<ArrayList<Integer>> adjacencyListToCycleList(ArrayList<Integer>[] adja
     public int compare(ArrayList<Integer> a, ArrayList<Integer> b) {
         return a.size()-b.size();
     }
-});
+  });
   
   // Remove repeated cycles
   for(int i=0; i<cycles.size(); i++){
@@ -41,7 +46,7 @@ boolean contains(ArrayList<Integer> a, ArrayList<Integer> b){
 }
 
 void followPath(ArrayList<Integer> path, ArrayList<ArrayList<Integer>> cycles, ArrayList<Integer>[] adjacencyList){    
-  logPath(path);
+  //logPath(path);
   ArrayList<Integer> neighbors = adjacencyList[path.get(path.size()-1)];
   
   // Iterate through the neighbors
@@ -50,7 +55,6 @@ void followPath(ArrayList<Integer> path, ArrayList<ArrayList<Integer>> cycles, A
     // Pick a neighbor
     Integer k = neighbors.get(i);
     if(path.size()>2 && k==path.get(0)){
-      //println("END");
       ArrayList<Integer> cycle = new ArrayList<Integer>();
       cycle.addAll(path);
       cycles.add(cycle);
