@@ -5,8 +5,6 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(PVector[][] _lines){
   ArrayList<PVector[]> lines = new ArrayList<PVector[]>();
   for(PVector[] l : _lines) lines.add(l);
   
-  ArrayList<PVector> intersections = new ArrayList<PVector>();
-  
   for(int i=0; i<lines.size(); i++){
       for(int j=i+1; j<lines.size(); j++){
         if(lines.get(i)[0]!=null && lines.get(j)[0]!=null){
