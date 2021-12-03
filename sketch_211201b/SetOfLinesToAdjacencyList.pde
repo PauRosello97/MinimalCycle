@@ -1,15 +1,15 @@
 // This module receives a set of lines and returns an adjacency list.
 
-ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
+ArrayList<Integer>[] setOfLinesToAdjacencyList(PVector[][] lines){
   
-  ArrayList<float[]> intersections = new ArrayList<float[]>();
-  ArrayList<float[][]> segments = new ArrayList<float[][]>();
+  ArrayList<PVector> intersections = new ArrayList<PVector>();
+  ArrayList<PVector[]> segments = new ArrayList<PVector[]>();
   
   boolean[] splitedLines = new boolean[lines.length]; // This array is used to mark the lines that have been splited and can't be considered segments.
   
   for(int i=0; i<lines.length; i++){
     for(int j=i+1; j<lines.length; j++){
-      float[] intersection = getIntersection(lines[i], lines[j]);
+      PVector intersection = getIntersection(lines[i], lines[j]);
       if(intersection!=null){
         if(!intersections.contains(intersection)) intersections.add(intersection);
         
@@ -18,8 +18,8 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
         // Then we have to split the line into segments.
         if(!(equals(lines[i][0],intersection) || equals(lines[i][1],intersection))){
           // We get two segments:
-          float[][] segmentA = {lines[i][0], intersection};
-          float[][] segmentB = {lines[i][1], intersection};
+          PVector[] segmentA = {lines[i][0], intersection};
+          PVector[] segmentB = {lines[i][1], intersection};
           segments.add(segmentA);
           segments.add(segmentB);
           splitedLines[i] = true;
@@ -28,8 +28,8 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
         // The same with the second line
         if(!(equals(lines[j][0],intersection) || equals(lines[j][1],intersection))){
           // We get two segments:
-          float[][] segmentA = {lines[j][0], intersection};
-          float[][] segmentB = {lines[j][1], intersection};
+          PVector[] segmentA = {lines[j][0], intersection};
+          PVector[] segmentB = {lines[j][1], intersection};
           segments.add(segmentA);
           segments.add(segmentB);
           splitedLines[j] = true;
@@ -44,28 +44,36 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
   
   // Remove segments that have nodes that are not intersections (because they don't create any polygon.
   for(int i=0; i<segments.size(); i++){
-    float[][] segment = segments.get(i);
-    boolean aIsIntersection = false;
-    boolean bIsIntersection = false;
-    for(float[] intersection : intersections){
-      if(equals(segment[0], intersection)) aIsIntersection = true;
-      if(equals(segment[1], intersection)) bIsIntersection = true;
-    }
-    if(!aIsIntersection || !bIsIntersection){
+    PVector[] segment = segments.get(i);
+    if(!intersections.contains(segment[0]) || !intersections.contains(segment[1])){
       segments.remove(i);
       if(i>0) i--;
     }
   }
 
   println("INTERSECTIONS:");
-  for(float[] intersection : intersections) println("(" + intersection[0] + ", "+ intersection[1]+ ")" );
+  for(PVector intersection : intersections) println("(" + intersection.x + ", "+ intersection.y + ")" );
 
-  println();
-  println("SEGMENTS:");
-  for(float[][] segment : segments) println("(" + segment[0][0] + ", " + segment[0][1] + ") - (" + segment[1][0] + ", " + segment[1][1] + ")");
+  println("\nSEGMENTS:");
+  for(PVector[] segment : segments) println("(" + segment[0].x + ", " + segment[0].y + ") - (" + segment[1].x + ", " + segment[1].y + ")");
   
   // Now we have a set of segments and intersections
+  // Lets translate segments to edges (position vectors to node connections)
   
+  println("\nEDGES:");
+  ArrayList<int[]> edges = new ArrayList<int[]>();
+  for(PVector[] segment : segments){
+    int nA = intersections.indexOf(segment[0]);
+    int nB = intersections.indexOf(segment[1]);
+    int[] edge = {nA, nB};
+    edges.add(edge);
+    println("("+nA+", "+nB+")");
+  }
+  
+  int nNodes = intersections.size();
+  ArrayList<Integer>[] adjacencyList = new ArrayList[nNodes];
+  
+  /*
   int N_NODES = 6;
   ArrayList<Integer>[] adjacencyList = new ArrayList[N_NODES];
   adjacencyList[0] =  new ArrayList<Integer>(Arrays.asList(1, 2));
@@ -73,26 +81,26 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
   adjacencyList[2] =  new ArrayList<Integer>(Arrays.asList(0, 3, 5));
   adjacencyList[3] =  new ArrayList<Integer>(Arrays.asList(1, 2, 4));
   adjacencyList[4] =  new ArrayList<Integer>(Arrays.asList(1, 3, 5));
-  adjacencyList[5] =  new ArrayList<Integer>(Arrays.asList(2, 4));  
+  adjacencyList[5] =  new ArrayList<Integer>(Arrays.asList(2, 4));  */
   
   return adjacencyList;
   
 }
 
-boolean equals(float[] a, float[] b){
-  return abs(a[0]-b[0])<0.001 && abs(a[1]-b[1])<0.001;
+boolean equals(PVector a, PVector b){
+  return abs(a.x-b.x)<0.001 && abs(a.y-b.y)<0.001;
 }
 
-float[] getIntersection(float[][] a, float[][] b) {
-    float x1 = a[0][0];
-    float y1 = a[0][1];
-    float x2 = a[1][0];
-    float y2 = a[1][1];
+PVector getIntersection(PVector[] a, PVector[] b) {
+    float x1 = a[0].x;
+    float y1 = a[0].y;
+    float x2 = a[1].x;
+    float y2 = a[1].y;
         
-    float x3 = b[0][0];
-    float y3 = b[0][1];
-    float x4 = b[1][0];
-    float y4 = b[1][1];
+    float x3 = b[0].x;
+    float y3 = b[0].y;
+    float x4 = b[1].x;
+    float y4 = b[1].y;
         
     float bx = x2 - x1;
     float by = y2 - y1;
@@ -118,7 +126,6 @@ float[] getIntersection(float[][] a, float[][] b) {
         return null;
     }
        
-    float[] intersection = {x1+t*bx, y1+t*by};
     
-    return intersection;
+    return new PVector(x1+t*bx, y1+t*by);
   }

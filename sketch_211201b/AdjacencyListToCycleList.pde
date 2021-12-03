@@ -10,7 +10,7 @@ ArrayList<ArrayList<Integer>> adjacencyListToCycleList(ArrayList<Integer>[] adja
   for(int i=0; i<adjacencyList.length; i++){
     ArrayList<Integer> p = new ArrayList<Integer>();
     p.add(i);
-    followPath(p, cycles, adjacencyList);  
+    //followPath(p, cycles, adjacencyList);  
   }
   
   Collections.sort(cycles, new Comparator<ArrayList<Integer>> () {

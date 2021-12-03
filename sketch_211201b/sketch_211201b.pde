@@ -2,11 +2,12 @@ import java.util.*;
 
 void setup(){
   
-  float[][][] setOfLines = {
-    {{0, 0}, {100, 100}},
-    {{0, 0}, {0, 100}},
-    {{0, 50}, {100, 50}},
-    {{0, 100}, {100, 100}}
+  PVector[][] setOfLines = {
+    {new PVector(0, 0), new PVector(100, 100)},
+    {new PVector(0, 0), new PVector(0, 100)},
+    {new PVector(0, 50), new PVector(100, 50)},
+    {new PVector(0, 100), new PVector(100, 100)},
+    {new PVector(25, 0), new PVector(25, 75)}
   };
   
   ArrayList<Integer>[] adjacencyList = setOfLinesToAdjacencyList(setOfLines);
