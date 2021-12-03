@@ -41,7 +41,27 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(float[][][] lines){
   for(int i=0; i<lines.length; i++){
     if(!splitedLines[i]) segments.add(lines[i]);
   }
+  
+  // Remove segments that have nodes that are not intersections (because they don't create any polygon.
+  for(int i=0; i<segments.size(); i++){
+    float[][] segment = segments.get(i);
+    boolean aIsIntersection = false;
+    boolean bIsIntersection = false;
+    for(float[] intersection : intersections){
+      if(equals(segment[0], intersection)) aIsIntersection = true;
+      if(equals(segment[1], intersection)) bIsIntersection = true;
+    }
+    if(!aIsIntersection || !bIsIntersection){
+      segments.remove(i);
+      if(i>0) i--;
+    }
+  }
 
+  println("INTERSECTIONS:");
+  for(float[] intersection : intersections) println("(" + intersection[0] + ", "+ intersection[1]+ ")" );
+
+  println();
+  println("SEGMENTS:");
   for(float[][] segment : segments) println("(" + segment[0][0] + ", " + segment[0][1] + ") - (" + segment[1][0] + ", " + segment[1][1] + ")");
   
   // Now we have a set of segments and intersections
