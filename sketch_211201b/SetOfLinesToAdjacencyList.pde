@@ -59,6 +59,10 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(PVector[][] lines){
   
   // Now we have a set of segments and intersections
   // Lets translate segments to edges (position vectors to node connections)
+
+  int nNodes = intersections.size();
+  ArrayList<Integer>[] adjacencyList = new ArrayList[nNodes];
+  for(int i=0; i<adjacencyList.length; i++) adjacencyList[i] = new ArrayList<Integer>();
   
   println("\nEDGES:");
   ArrayList<int[]> edges = new ArrayList<int[]>();
@@ -68,11 +72,19 @@ ArrayList<Integer>[] setOfLinesToAdjacencyList(PVector[][] lines){
     int[] edge = {nA, nB};
     edges.add(edge);
     println("("+nA+", "+nB+")");
+    adjacencyList[nA].add(nB);
+    adjacencyList[nB].add(nA);
   }
   
-  int nNodes = intersections.size();
-  ArrayList<Integer>[] adjacencyList = new ArrayList[nNodes];
-  
+  println("\nADJACENCY LIST:");
+  for(int i=0; i<adjacencyList.length; i++){
+    print(i + " | ");
+    for(int n : adjacencyList[i]){
+      print(n + " ");
+    }
+    println("");
+  }
+    
   /*
   int N_NODES = 6;
   ArrayList<Integer>[] adjacencyList = new ArrayList[N_NODES];
